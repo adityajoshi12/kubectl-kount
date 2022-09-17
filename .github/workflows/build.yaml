@@ -1,0 +1,29 @@
+name: build
+on:
+  push:
+    branches: [ '*' ]
+    tags: [ '*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+env:
+  GOLANG_VERSION: "1.18.x"
+jobs:
+  test:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+        - name: Checkout kubectl-kount
+          uses: actions/checkout@v3
+        - name: Setup Go environment
+          uses: actions/setup-go@v3
+          with:
+            go-version: ${{ env.GOLANG_VERSION }}
+        - name: Install dependencies
+          run: |
+            go version
+            go mod tidy && go get .
+        - name: Build
+          run: go build .
