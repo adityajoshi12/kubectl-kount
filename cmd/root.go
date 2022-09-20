@@ -29,6 +29,8 @@ const (
 	countDesc = `kubectl plugin to count kubernetes object.`
 )
 
+var version string
+
 // NewCmdCount adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func NewCmdCount() *cobra.Command {
@@ -38,6 +40,7 @@ func NewCmdCount() *cobra.Command {
 		Short:        "Count Kubernetes resource instances.",
 		Long:         countDesc,
 		SilenceUsage: true,
+		Version:      versionString(),
 	}
 
 	log.SetLevel(log.DebugLevel)
@@ -64,4 +67,10 @@ func NewCmdCount() *cobra.Command {
 		ns.NewNamespaceCountCmdCountCMD(rootCmd.OutOrStdout(), rootCmd.ErrOrStderr()),
 	)
 	return rootCmd
+}
+func versionString() string {
+	if len(version) == 0 {
+		return ""
+	}
+	return "v" + version
 }
